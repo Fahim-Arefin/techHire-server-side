@@ -18,6 +18,7 @@ const User = require("./model/user");
 const categoryRouter = require('./router/categoryRouter');
 const serviceRouter = require('./router/serviceRouter');
 const paymentRouter = require('./router/PaymentRouter');
+const reviewRouter = require('./router/reviewRouter');
 
 
 
@@ -72,6 +73,7 @@ const varifyToken = (req, res, next) => {
 app.use("/api/category", categoryRouter)
 app.use("/api/service", serviceRouter)
 app.use("/api/payment", paymentRouter)
+app.use("/api/review", reviewRouter)
 
 
 // -------------------------------------------------------------------------------------------------------------------
@@ -159,6 +161,30 @@ app.delete("/users/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.send(error);
+  }
+});
+
+
+app.patch('/users/:userId/role', async (req, res) => {
+  const userId = req.params.userId;
+  const newRole = req.body.role; // Assuming role is sent in the request body
+
+  try {
+    // Find the user by ID in your database and update their role
+    // This is a placeholder, replace it with your actual database logic
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update the user's role
+    user.role = newRole;
+    await user.save();
+
+    res.status(200).json({ message: 'User role updated successfully' });
+  } catch (error) {
+    console.error('Failed to update user role:', error);
+    res.status(500).json({ message: 'Internal server error' });
   }
 });
 

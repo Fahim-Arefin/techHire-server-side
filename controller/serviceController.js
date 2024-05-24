@@ -38,7 +38,7 @@ const getManagerService = async (req, res) => {
         const {email} = req.params
         const data = await Service.find({}).populate('user').populate('category').sort({ createdAt: -1 });
         for(let service of data) {
-            if(service.category.managerEmail === email) {
+            if(service?.category?.managerEmail === email) {
                 filteredData.push(service)
             }
         }
